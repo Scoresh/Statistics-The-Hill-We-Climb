@@ -1,7 +1,7 @@
 /*
    @author: Daniel Sabalakov
-   @date: 10/3/2025
-   @purpose: To automate processes used in "A tale of three brothers"
+   @date: 11/24/2025
+   @purpose: To automate processes used in "The Hill We Climb"
 */
 
 import java.io.File;
@@ -17,7 +17,7 @@ public class Hill{
    @SuppressWarnings("unchecked")
    public static void main(String[] args) throws FileNotFoundException{
       //load map from a .csv file (comma seperated values). This matches a number with a word.
-      HashMap<Integer,String> map = loadFromFile(new File("TaleNONStratified.csv"));
+      HashMap<Integer,String> map = loadFromFile(new File("hill_we_climb.csv"));
       
       //initialize total Words, total Random Generations, and an array to hold all the generated integers.
       int totalWords = countMap(map);
@@ -39,113 +39,6 @@ public class Hill{
       //seperator between problems
       printSeperator();
       
-      //Create a frequency map, and then print it out. 
-      HashMap<Integer,Integer> frequencyMap = generateFrequencyMap(map,generated);
-      for (Map.Entry<Integer, Integer> entry : frequencyMap.entrySet()) {
-         Integer key = entry.getKey();
-         Integer value = entry.getValue();
-         System.out.println("Word Length: " + key + ", N: " + value);
-      }
-      
-      
-      //seperator between problems
-      printSeperator();
-      
-      
-      //Proportion n length or lower, use custom method to print it out.
-      System.out.println("Proportion N or Lower: " + sampleProportion_N_OrLower(4,frequencyMap));
-      
-      //seperator between problems
-      printSeperator();
-      
-      //While I know that I can find strata counts myself, I still would like to seperate the csv via code.
-      HashMap<Integer,String>[] mapArray = new HashMap[4];
-      
-      mapArray[0] = loadFromFile(new File("Daniel12.csv"));
-      mapArray[1] = loadFromFile(new File("Daniel34.csv"));
-      mapArray[2] = loadFromFile(new File("Daniel56.csv"));
-      mapArray[3] = loadFromFile(new File("Daniel6P.csv"));
-      
-      double[] counts = new double[4];
-      
-      for (int i = 0; i < mapArray.length; i++){
-         HashMap<Integer,String> z = mapArray[i];
-         //should hopefully match up to original prediction. 
-         int count = countMap(z);
-         //temporarily set percents to count
-         counts[i] = count;
-         System.out.println("MAP LENGTHS: " + countMap(z));
-      }
-      System.out.println("\n");
-
-      double[] mappedCSV = new double[4];
-
-      for (int i = 0; i < counts.length; i++){
-         mappedCSV[i] = Math.round((double)counts[i] / totalWords * totalGeneration);
-      }
-      
-      printArray(mappedCSV);
-      
-      //seperator between problems
-      printSeperator();
-      
-      int[][] stratifiedGenerated = new int[4][];
-      System.out.println("Stratified Number Generations: ");
-      for (int i = 0; i < 4; i++){
-         stratifiedGenerated[i] = generateRandomArray((int)(mappedCSV[i]), (int)(counts[i]));
-         printArray(stratifiedGenerated[i]);
-      }
-
-      printSeperator();
-
-
-      //print out hashmap (and also print out frequencies)
-      for (int i = 0; i < stratifiedGenerated.length; i++){
-         System.out.println("Strata: " + i);
-         for (int j : stratifiedGenerated[i]){
-            System.out.printf("[Position: %3d, Word: %-10s, Length: %2d]\n",j,mapArray[i].get(j),mapArray[i].get(j).length()); 
-         }
-      }
-
-      printSeperator();
-
-      
-      HashMap<Integer,Integer>[] stratifiedFrequencyMap = new HashMap[4]; 
-      for (int i = 0; i < stratifiedFrequencyMap.length; i++){
-         System.out.println("Strata: " + i);
-         stratifiedFrequencyMap[i] = generateFrequencyMap(mapArray[i], stratifiedGenerated[i]);
-         for (Map.Entry<Integer, Integer> entry : stratifiedFrequencyMap[i].entrySet()) {
-            Integer key = entry.getKey();
-            Integer value = entry.getValue();
-            System.out.println("Word Length: " + key + ", N: " + value);
-         }
-      }
-      
-      printSeperator();
-
-      int n = 4;
-      int n_or_lower = 0;
-      for (int i = 0; i < stratifiedFrequencyMap.length; i++){
-         n_or_lower+=calculateFrequencyOfN_or_lower(n, stratifiedFrequencyMap[i]);
-      }  
-      System.out.println("There are " + n_or_lower + " integers " + n + " or lower.");
-      System.out.println("The proportion of " + n + " or lower is: " +  (double)(n_or_lower) / totalGeneration );
-
-      
-      printSeperator();
-
-      System.out.println("COPY PASTABLE: \n\n");
-
-
-      System.out.println("Freq n=24 SRS");
-      printMap(frequencyMap);
-
-      System.out.println("\n\nFreq n=24 STRATIFIED");
-      for (HashMap<Integer,Integer> i : stratifiedFrequencyMap){
-         printMap(i);
-      }
-
-      System.out.println("\n\n");
 
      
 	}
